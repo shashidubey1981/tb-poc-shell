@@ -1,4 +1,9 @@
 // ==============   REFERENCE PATHS   ==============
+
+export const dynamicComponentReferenceIncludes = [
+    'dynamic_component'
+]
+
 export const heroReferenceIncludes = [
     'hero',
     'hero.cta.link'

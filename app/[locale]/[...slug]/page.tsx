@@ -9,7 +9,14 @@ import { NotFoundComponent, PageWrapper } from '@/components'
 import { onEntryChange } from '@/config'
 import useRouterHook from '@/hooks/useRouterHook'
 import { setDataForChromeExtension } from '@/utils'
-import { heroReferenceIncludes, imageCardsReferenceIncludes, teaserReferenceIncludes, textAndImageReferenceIncludes, textJSONRtePaths } from '@/services/helper'
+import {
+    dynamicComponentReferenceIncludes,
+    heroReferenceIncludes,
+    imageCardsReferenceIncludes,
+    teaserReferenceIncludes,
+    textAndImageReferenceIncludes,
+    textJSONRtePaths
+} from '@/services/helper'
 import { getEntryByUrl } from '@/services'
 import { usePersonalization } from '@/context'
 
@@ -50,6 +57,7 @@ export default function LandingPage () {
         const fetchData = async () => {
             try {
                 const refUids = [
+                    ...dynamicComponentReferenceIncludes,
                     ...heroReferenceIncludes,
                     ...textAndImageReferenceIncludes,
                     ...teaserReferenceIncludes,
@@ -77,6 +85,9 @@ export default function LandingPage () {
     return (<>
         {data
             ? <PageWrapper {...data}>
+                {
+
+                }
                 {data?.components
                     ? <RenderComponents $={data?.$}
                         hero={data?.hero && Array.isArray(data.hero) ? data.hero[0] : data.hero}
