@@ -104,10 +104,6 @@ export const getEntryByUrl = async <T> (contentTypeUid: string, locale: string, 
             CONTENTSTACK_API_KEY, CONTENTSTACK_DELIVERY_TOKEN, CONTENTSTACK_PREVIEW_TOKEN, CONTENTSTACK_PREVIEW_HOST, CONTENTSTACK_ENVIRONMENT')
         }
 
-        if(entryUrl.includes('/category')){
-            contentTypeUid = '/category_landing_page';
-        }
-
         const entryQuery = Stack.contentType(contentTypeUid)
             .entry()
             .locale(locale)

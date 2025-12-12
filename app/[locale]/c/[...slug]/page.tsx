@@ -1,4 +1,3 @@
-
 'use client'
 import { useEffect, useState } from 'react'
 import {isNull}  from 'lodash'
@@ -10,20 +9,32 @@ import { NotFoundComponent, PageWrapper } from '@/components'
 import { onEntryChange } from '@/config'
 import useRouterHook from '@/hooks/useRouterHook'
 import { setDataForChromeExtension } from '@/utils'
-import { heroReferenceIncludes, imageCardsReferenceIncludes, teaserReferenceIncludes, textAndImageReferenceIncludes, textJSONRtePaths } from '@/services/helper'
+import {
+    dynamicComponentReferenceIncludes,
+    heroReferenceIncludes,
+    imageCardsReferenceIncludes,
+    teaserReferenceIncludes,
+    textAndImageReferenceIncludes,
+    textJSONRtePaths
+} from '@/services/helper'
 import { getEntryByUrl } from '@/services'
 import { usePersonalization } from '@/context'
 
 /**
- * @component LandingPage - Slug Based
+ * @component Category Landing Page - Slug Based
  * 
- * @route '/{locale}/{slug}'
- * @description Component that renders the landing page based on the slug
+ * @route '/{locale}/c/{slug}'
+ * @description Component that renders the category landing page based on the slug
  * 
  * @returns {JSX.Element}
  */
-export default function LandingPage () {
-
+export default function LandingPage ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+    
+    // Get all search params with keys and values
+    const searchParamsEntries = Object.entries(searchParams);
+    // Access individual params
+    const { parentCategory, subCategory } = searchParams;
+    // Access any param by key: searchParams[key]
     const [data, setData] = useState<Page.LandingPage['entry'] | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const {path, locale} = useRouterHook()
@@ -51,6 +62,7 @@ export default function LandingPage () {
         const fetchData = async () => {
             try {
                 const refUids = [
+                    ...dynamicComponentReferenceIncludes,
                     ...heroReferenceIncludes,
                     ...textAndImageReferenceIncludes,
                     ...teaserReferenceIncludes,
@@ -59,9 +71,11 @@ export default function LandingPage () {
                 const jsonRtePaths = [
                     ...textJSONRtePaths
                 ]
-                const res = await getEntryByUrl<Page.LandingPage['entry']>('landing_page',locale, path, refUids, jsonRtePaths, personalizationSDK) as Page.LandingPage['entry']
+                const contentType = 'category_landing_page'
+                const path = '/c'
+                const res = await getEntryByUrl<Page.LandingPage['entry']>(contentType,locale, path, refUids, jsonRtePaths, personalizationSDK) as Page.LandingPage['entry']
                 setData(res)
-                setDataForChromeExtension({ entryUid: res?.uid || '', contenttype: 'landing_page', locale: locale })
+                setDataForChromeExtension({ entryUid: res?.uid || '', contenttype: contentType, locale: locale })
                 if (!res && !isNull(res)) {
                     throw '404'
                 }
@@ -83,6 +97,7 @@ export default function LandingPage () {
                         hero={data?.hero && Array.isArray(data.hero) ? data.hero[0] : data.hero}
                         components={data?.components}
                         isABEnabled={isABTestEnabled}
+                        searchParams={searchParams}
                     /> : ''}
             </PageWrapper>
             : <>
