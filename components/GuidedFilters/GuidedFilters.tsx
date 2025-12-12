@@ -22,6 +22,8 @@ export interface GuidedFilters {
   onFilterChange?: (selectedColors: string[]) => void
   className?: string
   component_name?: string
+  parentCategory?: string
+  subCategory?: string
 }
 
 /**
@@ -64,7 +66,7 @@ export const defaultColorFilterSet2: ColorFilterOption[] = [
 const GuidedFilters: React.FC<GuidedFilters> = (props: GuidedFilters) => {
   // Select default color filter set based on api_component prop
   // If api_component === "page", use defaultColorFilterSet1, otherwise use defaultColorFilterSet2
-  const defaultColorFilters = props.component_name === 'guided_filter' 
+  const defaultColorFilters = props.parentCategory === 'mens-clothing' && props.subCategory === 'mens-suits'
     ? defaultColorFilterSet1 
     : defaultColorFilterSet2
 
@@ -84,7 +86,7 @@ const GuidedFilters: React.FC<GuidedFilters> = (props: GuidedFilters) => {
       : defaultColorFilters
   }
 
-  const { $, id, title, color_filters = defaultColorFilters, onFilterChange, className = '' } = mergedProps
+  const { id, title, color_filters = defaultColorFilters, onFilterChange, className = '' } = mergedProps
   const [selectedColors, setSelectedColors] = useState<string[]>([])
 
   /**
@@ -117,12 +119,10 @@ const GuidedFilters: React.FC<GuidedFilters> = (props: GuidedFilters) => {
     <div
       id={id}
       className={`mx-[2.25rem] md:mx-[5.25rem] mb-25 my-25`}
-      {...$?.title}
     >
       {title && (
         <h3
           className="text-2xl md:text-3xl font-semibold mb-6 text-stone"
-          {...$?.title}
           data-id="h3-text"
         >
           {title}
@@ -162,7 +162,6 @@ const GuidedFilters: React.FC<GuidedFilters> = (props: GuidedFilters) => {
                   {filter.label && (
                     <span 
                       className="text-sm md:text-base font-medium text-stone"
-                      {...filter.$?.label}
                     >
                       {filter.label}
                     </span>

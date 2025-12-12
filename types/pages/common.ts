@@ -31,7 +31,8 @@ export interface pageBlocks {
 export type pageRenderProps = {
   components: pageBlocks[];
   isABEnabled?: boolean;
-  [key: string]: string | boolean | pageBlocks[] | FeaturedArticles | Hero | LivePreviewTypeMapper<pageRenderProps> | undefined;
+  searchParams?: { [key: string]: string | string[] | undefined };
+  [key: string]: string | boolean | pageBlocks[] | FeaturedArticles | Hero | LivePreviewTypeMapper<pageRenderProps> | { [key: string]: string | string[] | undefined } | undefined;
   $?: LivePreviewTypeMapper<pageRenderProps>;
   featured_articles?: FeaturedArticles;
   hero?: Hero;

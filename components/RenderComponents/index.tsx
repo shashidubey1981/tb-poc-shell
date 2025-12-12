@@ -22,7 +22,7 @@ import { isDataInLiveEdit } from '@/utils'
  * @returns {JSX.Element} Rendered components
  */
 
-function RenderComponents ({ hero, components, featured_articles, $, isABEnabled = false}: Page.pageRenderProps) {
+function RenderComponents ({ hero, components, featured_articles, $, isABEnabled = false, searchParams}: Page.pageRenderProps) {
 
     const apiComponentMapper = (apiComponent: pageBlocks['api_component'], key: number) => {
         if (!apiComponent) return null
@@ -32,6 +32,7 @@ function RenderComponents ({ hero, components, featured_articles, $, isABEnabled
                 <GuidedFilters
                     id={`guided-filters-${key}`}
                     {...apiComponent}
+                    {...searchParams}
                 />
             )
         }

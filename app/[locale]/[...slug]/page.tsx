@@ -28,8 +28,12 @@ import { usePersonalization } from '@/context'
  * 
  * @returns {JSX.Element}
  */
-export default function LandingPage () {
-
+export default function LandingPage ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+    // Get all search params with keys and values
+    const searchParamsEntries = Object.entries(searchParams);
+    // Access individual params
+    const { parentCategory, subCategory } = searchParams;
+    // Access any param by key: searchParams[key]
     const [data, setData] = useState<Page.LandingPage['entry'] | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
     const {path, locale} = useRouterHook()
@@ -90,6 +94,7 @@ export default function LandingPage () {
                         hero={data?.hero && Array.isArray(data.hero) ? data.hero[0] : data.hero}
                         components={data?.components}
                         isABEnabled={isABTestEnabled}
+                        searchParams={searchParams}
                     /> : ''}
             </PageWrapper>
             : <>

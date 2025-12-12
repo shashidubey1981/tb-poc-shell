@@ -73,8 +73,8 @@ export interface SectionLink {
   $?: LivePreviewTypeMapper<SectionLink>;
   text?:string
   link?:InternalLink[],
-  link_text?:string
-  
+  link_text?:string,
+  url?:string
 }
 
 // ######################### FOOTER #########################

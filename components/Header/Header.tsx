@@ -144,11 +144,11 @@ function Header (props: App.Header): JSX.Element {
                                                         {...item?.mega_menu?.[0]?.sections?.[0].$?.[`links__${ind}` as keyof LivePreviewTypeMapper<MegaMenuSection>]}
                                                     >       
                                                         <a
-                                                            href={'/' + router.locale + linkData?.link?.[0]?.url}
+                                                            href={linkData?.link?.[0]?.url ? '/' + router.locale + linkData?.link?.[0]?.url : '/' + router.locale + linkData.url}
                                                             className='relative flex flex-col outline-none size-[12rem] xl:size-[225.43px] border-transparent
                                                             shadow-[0.69813rem_0.69813rem_1.57125rem_0.17444rem_rgba(0,0,0,0.5)] bg-stone shadow-stone/50 overflow-hidden group'
-                                                            onClick={() => setAttribute(String(linkData?.link?.[0]?.url))}
-                                                            {...linkData?.$?.link}
+                                                            onClick={() => setAttribute(String(linkData?.link?.[0]?.url ? linkData?.link?.[0]?.url : linkData.url))}
+                                                            {...linkData?.$?.link ? linkData?.$?.link : linkData?.$?.url}
                                                             role='button'
                                                         >
                                                             {linkData?.thumbnail?.url && <Image 
@@ -171,7 +171,7 @@ function Header (props: App.Header): JSX.Element {
                                                                 </>}
                                                                 {linkData?.link_text && <span
                                                                     className='mt-[10.54px] btn-primary !min-w-[8.615625rem] w-[8.615625rem] text-center !h-auto !leading-[1.5rem] py-[0.62rem] group-hover:underline'
-                                                                    {...linkData?.$?.link}
+                                                                    {...linkData?.$?.link ? linkData?.$?.link : linkData?.$?.url}
                                                                 >
                                                                     {linkData?.link_text && <span className='text-clamp' {...linkData?.$?.link_text}>{linkData?.link_text}</span>}
                                                                 </span>}
