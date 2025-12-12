@@ -85,9 +85,6 @@ export default function LandingPage () {
     return (<>
         {data
             ? <PageWrapper {...data}>
-                {
-
-                }
                 {data?.components
                     ? <RenderComponents $={data?.$}
                         hero={data?.hero && Array.isArray(data.hero) ? data.hero[0] : data.hero}

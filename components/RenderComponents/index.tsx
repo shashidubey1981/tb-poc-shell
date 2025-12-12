@@ -4,6 +4,7 @@ const CardCollection = dynamic(() => import('@/components/CardCollection').then(
 const FeaturedArticles = dynamic(() => import('@/components/FeaturedArticles').then(mod => mod.FeaturedArticles))
 const Hero = dynamic(() => import('@/components/Hero').then(mod => mod.Hero))
 const Teaser = dynamic(() => import('@/components/Teaser').then(mod => mod.Teaser))
+const GuidedFilters = dynamic(() => import('@/components/GuidedFilters').then(mod => mod.GuidedFilters))
 const Text = dynamic(() => import('@/components/Text').then(mod => mod.Text))
 const TextAndImageCarousel = dynamic(() => import('@/components/TextAndImageCarousel').then(mod => mod.TextAndImageCarousel))
 import { VB_EmptyBlockParentClass } from '@/config'
@@ -23,6 +24,21 @@ import { isDataInLiveEdit } from '@/utils'
 
 function RenderComponents ({ hero, components, featured_articles, $, isABEnabled = false}: Page.pageRenderProps) {
 
+    const apiComponentMapper = (apiComponent: pageBlocks['api_component'], key: number) => {
+        if (!apiComponent) return null
+
+        if (apiComponent.component_name === 'guided_filter') {
+            return (
+                <GuidedFilters
+                    id={`guided-filters-${key}`}
+                    {...apiComponent}
+                />
+            )
+        }
+
+        return null
+    }
+
     const componentMapper = (component: pageBlocks, key: number) => {
 
         switch (true) {
@@ -36,6 +52,9 @@ function RenderComponents ({ hero, components, featured_articles, $, isABEnabled
                 />
 
             )
+
+        case (!!component.api_component):
+            return apiComponentMapper(component.api_component, key)
 
         case (!!component.text_and_image_carousel):
             return (

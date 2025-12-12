@@ -71,6 +71,12 @@ export interface Teaser {
   }
 }
 
+export interface APIComponent {
+  $?: LivePreviewTypeMapper<APIComponent>;
+  id?: string;
+  component_name?: string;
+}
+
 // CardCollection Component Type <-----
 export interface CardCollection extends CardCollectionBody {
   header?: CardCollectionHeader;
