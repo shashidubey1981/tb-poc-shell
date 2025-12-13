@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+import {SingleColumnProductCard} from '@MensWearhouse/kairos-fabric'
 
 const CardCollection = dynamic(() => import('@/components/CardCollection').then(mod => mod.CardCollection))
 const FeaturedArticles = dynamic(() => import('@/components/FeaturedArticles').then(mod => mod.FeaturedArticles))
@@ -7,10 +8,10 @@ const Teaser = dynamic(() => import('@/components/Teaser').then(mod => mod.Tease
 const GuidedFilters = dynamic(() => import('@/components/GuidedFilters').then(mod => mod.GuidedFilters))
 const Text = dynamic(() => import('@/components/Text').then(mod => mod.Text))
 const TextAndImageCarousel = dynamic(() => import('@/components/TextAndImageCarousel').then(mod => mod.TextAndImageCarousel))
-import { VB_EmptyBlockParentClass } from '@/config'
-import { Page } from '@/types'
-import { pageBlocks } from '@/types/pages'
-import { isDataInLiveEdit } from '@/utils'
+import {VB_EmptyBlockParentClass} from '@/config'
+import {Page} from '@/types'
+import {pageBlocks} from '@/types/pages'
+import {isDataInLiveEdit} from '@/utils'
 
 /**
  * Renders different components based on the provided page data
@@ -22,7 +23,14 @@ import { isDataInLiveEdit } from '@/utils'
  * @returns {JSX.Element} Rendered components
  */
 
-function RenderComponents ({ hero, components, featured_articles, $, isABEnabled = false, searchParams}: Page.pageRenderProps) {
+function RenderComponents({
+                              hero,
+                              components,
+                              featured_articles,
+                              $,
+                              isABEnabled = false,
+                              searchParams
+                          }: Page.pageRenderProps) {
 
     const apiComponentMapper = (apiComponent: pageBlocks['api_component'], key: number) => {
         if (!apiComponent) return null
@@ -44,52 +52,52 @@ function RenderComponents ({ hero, components, featured_articles, $, isABEnabled
 
         switch (true) {
 
-        case (!!component.teaser):
-            return (
+            case (!!component.teaser):
+                return (
 
-                <Teaser
-                    id={`teaser-${key}`}
-                    {...component.teaser}
-                />
+                    <Teaser
+                        id={`teaser-${key}`}
+                        {...component.teaser}
+                    />
 
-            )
+                )
 
-        case (!!component.api_component):
-            return apiComponentMapper(component.api_component, key)
+            case (!!component.api_component):
+                return apiComponentMapper(component.api_component, key)
 
-        case (!!component.text_and_image_carousel):
-            return (
+            case (!!component.text_and_image_carousel):
+                return (
 
-                <TextAndImageCarousel
-                    id={`text-image-carousel-${key}`}
-                    {...component.text_and_image_carousel}
-                />
+                    <TextAndImageCarousel
+                        id={`text-image-carousel-${key}`}
+                        {...component.text_and_image_carousel}
+                    />
 
-            )
+                )
 
-        case (!!component.card_collection):
-            return (
+            case (!!component.card_collection):
+                return (
 
-                <CardCollection
-                    id={`card-collection-${key}`}
-                    {...component.card_collection}
-                    className='mx-[2.25rem] md:mx-[5.25rem] mb-25'
-                />
+                    <CardCollection
+                        id={`card-collection-${key}`}
+                        {...component.card_collection}
+                        className='mx-[2.25rem] md:mx-[5.25rem] mb-25'
+                    />
 
-            )
+                )
 
-        case (!!component.text):
-            return (
+            case (!!component.text):
+                return (
 
-                <Text
-                    id={`text-${key}`}
-                    {...component.text}
-                />
+                    <Text
+                        id={`text-${key}`}
+                        {...component.text}
+                    />
 
-            )
+                )
 
-        default:
-            return null
+            default:
+                return null
         }
 
     }
@@ -97,7 +105,7 @@ function RenderComponents ({ hero, components, featured_articles, $, isABEnabled
     return (
         <>
             {hero && <Hero id='hero-banner' {...hero} isABEnabled={isABEnabled} {...$?.hero}/>}
-            <div 
+            <div
                 {...((isDataInLiveEdit() && $?.components) || {})} //Parent wrapper
                 className={components?.length ? undefined : `${VB_EmptyBlockParentClass} max-height mt-32`}
             >
@@ -109,10 +117,12 @@ function RenderComponents ({ hero, components, featured_articles, $, isABEnabled
                         componentMapper(component, key)
                     }
                 </div>)}
+            
             </div>
-            {featured_articles && <FeaturedArticles id='card-collection-FeaturedArticles' {...featured_articles} {...$?.featured_articles} />}
+            {featured_articles && <FeaturedArticles
+                id='card-collection-FeaturedArticles' {...featured_articles} {...$?.featured_articles} />}
         </>
     )
 }
 
-export { RenderComponents }
+export {RenderComponents}

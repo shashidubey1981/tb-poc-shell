@@ -24,6 +24,7 @@ export interface GuidedFilters {
   component_name?: string
   parentCategory?: string
   subCategory?: string
+  slug?:string[]
 }
 
 /**
@@ -66,7 +67,7 @@ export const defaultColorFilterSet2: ColorFilterOption[] = [
 const GuidedFilters: React.FC<GuidedFilters> = (props: GuidedFilters) => {
   // Select default color filter set based on api_component prop
   // If api_component === "page", use defaultColorFilterSet1, otherwise use defaultColorFilterSet2
-  const defaultColorFilters = props.parentCategory === 'mens-clothing' && props.subCategory === 'mens-suits'
+  const defaultColorFilters = props.slug?.some(s => s.includes('mens-suits'))
     ? defaultColorFilterSet1 
     : defaultColorFilterSet2
 

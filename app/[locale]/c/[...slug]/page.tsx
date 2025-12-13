@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, use } from 'react'
 import {isNull}  from 'lodash'
 import Personalize from '@contentstack/personalize-edge-sdk'
 import { RenderComponents } from '@/components'
@@ -28,12 +28,12 @@ import { usePersonalization } from '@/context'
  * 
  * @returns {JSX.Element}
  */
-export default function LandingPage ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+export default function LandingPage ({ params }: { params: Promise<any> }) {
     
-    // Get all search params with keys and values
-    const searchParamsEntries = Object.entries(searchParams);
-    // Access individual params
-    const { parentCategory, subCategory } = searchParams;
+    const unwrappedParams = use(params)
+    const pathInfoEntries = unwrappedParams;
+    
+    // const { parentCategory, subCategory } = searchParamsEntries;
     // Access any param by key: searchParams[key]
     const [data, setData] = useState<Page.LandingPage['entry'] | null>(null)
     const [loading, setLoading] = useState<boolean>(true)
@@ -97,7 +97,7 @@ export default function LandingPage ({ searchParams }: { searchParams: { [key: s
                         hero={data?.hero && Array.isArray(data.hero) ? data.hero[0] : data.hero}
                         components={data?.components}
                         isABEnabled={isABTestEnabled}
-                        searchParams={searchParams}
+                        searchParams={pathInfoEntries}
                     /> : ''}
             </PageWrapper>
             : <>
