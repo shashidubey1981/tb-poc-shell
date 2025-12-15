@@ -158,6 +158,12 @@ export type CTA = {
   link?: InternalLink[];
 };
 
+export type PGPCTA = {
+  $?: LivePreviewTypeMapper<PGPCTA>;
+  text?: string;
+  url?: string;
+};
+
 export type UserFormModal = {
     $?: LivePreviewTypeMapper<UserFormModal>;
     icon?: Asset;

@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 import {SingleColumnProductCard} from '@MensWearhouse/kairos-fabric'
 
+const PGPCardCollection = dynamic(() => import('@/components/PGPCardCollection').then(mod => mod.PGPCardCollection))
 const CardCollection = dynamic(() => import('@/components/CardCollection').then(mod => mod.CardCollection))
 const FeaturedArticles = dynamic(() => import('@/components/FeaturedArticles').then(mod => mod.FeaturedArticles))
 const Hero = dynamic(() => import('@/components/Hero').then(mod => mod.Hero))
@@ -75,6 +76,17 @@ function RenderComponents({
 
                 )
 
+            case (!!component.pgp_collection):
+                return (
+
+                    <PGPCardCollection
+                        id={`pgpcard-collection-${key}`}
+                        {...component.pgp_collection}
+                        className='mx-[2.25rem] md:mx-[5.25rem] mb-25'
+                    />
+
+                )
+
             case (!!component.card_collection):
                 return (
 
@@ -84,7 +96,7 @@ function RenderComponents({
                         className='mx-[2.25rem] md:mx-[5.25rem] mb-25'
                     />
 
-                )
+                )    
 
             case (!!component.text):
                 return (

@@ -1,7 +1,7 @@
 'use client'
 
 import _, { isString } from 'lodash'
-import { CTA, InternalLink } from '@/types/common'
+import { CTA, PGPCTA, InternalLink } from '@/types/common'
 
 /**
  * Resolves a card CTA (Call To Action) to its appropriate link value
@@ -11,7 +11,7 @@ import { CTA, InternalLink } from '@/types/common'
  * - If cta is a string, returns the string directly
  * - If cta is a CTA object with a link property, returns the link array
  */
-export const resolveCardCta = (cta?: string | CTA) => {
+export const resolveCardCta = (cta?: string | CTA | PGPCTA) => {
     if(!cta) return
     if(isString(cta) ) return cta
     if(cta?.link && cta?.link?.length >= 0) return cta.link

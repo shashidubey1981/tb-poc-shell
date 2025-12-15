@@ -1,5 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction } from 'react'
-import { Asset, CTA, InternalLink, LivePreviewTypeMapper } from './common'
+import { Asset, PGPCTA, CTA, InternalLink, LivePreviewTypeMapper } from './common'
 import { ArticleListingPage } from './pages'
 
 // ######################### COMPONENTS #########################
@@ -76,6 +76,34 @@ export interface APIComponent {
   id?: string;
   component_name?: string;
 }
+
+// PGPCardCollection Component Type <-----
+export interface PGPCardCollection {
+  id?: string;
+  cards?: PGPImageCardItem[] | [];
+  count?: number;
+  editKey?: string;
+  className?: string;
+  $?: LivePreviewTypeMapper<PGPCardCollection>;
+}
+
+export interface PGPImageCardItem extends Image, PGPImageCardText{
+  id?: string | number;
+  key?: string | number;
+  count?: number;
+  index?: any;
+  $?: LivePreviewTypeMapper<PGPImageCardItem>
+};
+
+export interface PGPImageCardText {
+  title?: string;
+  subtitle?: string;
+  cta?: PGPCTA;
+  url?: string; // when reference is passed as a card
+  summary?: string;
+  $?: LivePreviewTypeMapper<PGPImageCardText>
+}
+
 
 // CardCollection Component Type <-----
 export interface CardCollection extends CardCollectionBody {

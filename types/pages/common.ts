@@ -1,4 +1,4 @@
-import { CardCollection, FeaturedArticles, Hero, Image, RelatedArticles, RelatedLinks, Teaser, Text, TextAndImageCarousel , APIComponent} from '../components'
+import { PGPCardCollection, CardCollection, FeaturedArticles, Hero, Image, RelatedArticles, RelatedLinks, Teaser, Text, TextAndImageCarousel , APIComponent} from '../components'
 import { LivePreviewTypeMapper, localeItems, PageEntry } from '../common'
 
 export type SeoProps = {
@@ -24,6 +24,7 @@ export interface pageBlocks {
   text_and_image_carousel?:TextAndImageCarousel
   text?: Text
   card_collection?:CardCollection
+  pgp_collection?:PGPCardCollection
   image_preset?: Image
   seo?:SeoProps
 }
