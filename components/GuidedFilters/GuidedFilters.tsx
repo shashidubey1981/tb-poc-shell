@@ -1,6 +1,5 @@
 'use client'
 import React, {useState} from 'react'
-import {LivePreviewTypeMapper} from '@/types/common'
 
 /**
  * Extended Data for Guided Filter Entry

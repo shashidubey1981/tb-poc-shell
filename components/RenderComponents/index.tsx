@@ -7,6 +7,7 @@ const FeaturedArticles = dynamic(() => import('@/components/FeaturedArticles').t
 const Hero = dynamic(() => import('@/components/Hero').then(mod => mod.Hero))
 const Teaser = dynamic(() => import('@/components/Teaser').then(mod => mod.Teaser))
 const GuidedFilters = dynamic(() => import('@/components/GuidedFilters').then(mod => mod.GuidedFilters))
+const FacetOptions = dynamic(() => import('@/components/FacetOptions').then(mod => mod.FacetOptions))
 const Text = dynamic(() => import('@/components/Text').then(mod => mod.Text))
 const TextAndImageCarousel = dynamic(() => import('@/components/TextAndImageCarousel').then(mod => mod.TextAndImageCarousel))
 import {VB_EmptyBlockParentClass} from '@/config'
@@ -40,6 +41,15 @@ function RenderComponents({
             return (
                 <GuidedFilters
                     id={`guided-filters-${key}`}
+                    {...apiComponent}
+                    {...searchParams}
+                />
+            )
+        }
+        if (apiComponent.component_name === 'filters') {
+            return (
+                <FacetOptions
+                    id={`filters-${key}`}
                     {...apiComponent}
                     {...searchParams}
                 />
