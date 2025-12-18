@@ -8,6 +8,7 @@ const Hero = dynamic(() => import('@/components/Hero').then(mod => mod.Hero))
 const Teaser = dynamic(() => import('@/components/Teaser').then(mod => mod.Teaser))
 const GuidedFilters = dynamic(() => import('@/components/GuidedFilters').then(mod => mod.GuidedFilters))
 const FacetOptions = dynamic(() => import('@/components/FacetOptions').then(mod => mod.FacetOptions))
+const QuickLinks = dynamic(() => import('@/components/QuickLinks').then(mod => mod.QuickLinks))
 const Text = dynamic(() => import('@/components/Text').then(mod => mod.Text))
 const TextAndImageCarousel = dynamic(() => import('@/components/TextAndImageCarousel').then(mod => mod.TextAndImageCarousel))
 import {VB_EmptyBlockParentClass} from '@/config'
@@ -86,7 +87,17 @@ function RenderComponents({
 
                 )
 
-            case (!!component.pgp_collection):
+                case (!!component.quick_links):
+                    return (
+    
+                            <QuickLinks
+                            id={`quick-links-${key}`}
+                            {...component.quick_links}
+                            {...searchParams}
+                        />
+                    )
+            
+                case (!!component.pgp_collection):
                 return (
 
                     <PGPCardCollection
@@ -96,6 +107,8 @@ function RenderComponents({
                     />
 
                 )
+
+                
 
             case (!!component.card_collection):
                 return (

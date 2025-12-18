@@ -14,7 +14,7 @@ import { PGPCardCollectionBody } from './PGPCardCollectionBody'
  * @returns {JSX.Element} Collection of cards or card tiles
  */
 const PGPCardCollection: React.FC<PGPCardCollectionProps> = (props: PGPCardCollectionProps): JSX.Element => {
-    const { cards, count, id, className, $ } = props
+    const { cards, count, id, className, $  } = props
 
     if ((!cards || cards.length === 0)) {
         return <></>

@@ -87,6 +87,19 @@ export interface PGPCardCollection {
   $?: LivePreviewTypeMapper<PGPCardCollection>;
 }
 
+export interface QuickLinks {
+  id?: string;
+  title?: string;
+  items?: QuickLinkCategory[] | [];
+  slug?: string[];
+  $?: LivePreviewTypeMapper<QuickLinks>;
+}
+
+export interface QuickLinkCategory {
+  link_text: string
+  link: string
+}
+
 export interface PGPImageCardItem extends Image, PGPImageCardText{
   id?: string | number;
   key?: string | number;

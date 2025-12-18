@@ -19,6 +19,7 @@ import {
 } from '@/services/helper'
 import { getEntryByUrl } from '@/services'
 import { usePersonalization } from '@/context'
+import { App } from '@/types'
 
 /**
  * @component Category Landing Page - Slug Based
@@ -40,6 +41,7 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
     const {path, locale} = useRouterHook()
     const [isABTestEnabled, setIsABTestEnabled] = useState<boolean>(false)
     const { personalizationSDK } = usePersonalization()
+    const [webConfig, setWebConfig] = useState<App.WebConfig>()
 
     /**
      * useEffect to conditionally trigger and impression for a configured AB testing 
