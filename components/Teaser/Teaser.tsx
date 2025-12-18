@@ -61,18 +61,18 @@ const Teaser: React.FC<TeaserProps> = (props: TeaserProps) => {
             </div>
             <div className={`dark flex flex-row ${position_css}`}>
                 <div className='mx-[2.25rem] md:mx-[5.25rem] md:max-w-[45.635%]'>
-                    {heading && <h2 data-id='h2-text' {...$?.heading} 
+                    {heading && <div data-id='h2-text' {...$?.heading} 
                         className={`text-4xl md:text-6xl font-medium md:font-semibold tracking-[0.125rem] p-0 text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)] mt-8.9 ${(position_css?.includes('text-right') ? 'text-right' : '')}`}>
-                        {heading}</h2>}
-                    {content && <p data-id='paragraph-text' {...$?.content} className={'font-extralight text-md md:text-xl tracking-[0.063rem] p-0 text-white mt-7.5 drop-shadow-[0_2.5px_2.5px_rgba(0,0,0,0.8)] line-clamp-5 whitespace-break-spaces'}>
+                        {heading}</div>}
+                    {content && <div data-id='paragraph-text' {...$?.content} className={'font-extralight text-md md:text-xl tracking-[0.063rem] p-0 text-white mt-7.5 drop-shadow-[0_2.5px_2.5px_rgba(0,0,0,0.8)] line-clamp-5 whitespace-break-spaces'}>
                         {content}
-                    </p>}
-                    {cta?.[0]?.text && ctaLink && <span {...cta?.[0]?.$?.link}><Link
+                    </div>}
+                    {cta?.[0]?.text && ctaLink && <div {...cta?.[0]?.$?.link}><Link
                         url={ctaLink}
                         className={`relative tracking-normal mt-8.9 max-w-full w-max btn-primary ${(position_css?.includes('justify-end') ? 'justify-self-end' : '')}`}
                     >
                         <span {...cta?.[0]?.$?.text}>{cta[0].text}</span>
-                    </Link></span>}
+                    </Link></div>}
                 </div>
             </div>
         </div>
