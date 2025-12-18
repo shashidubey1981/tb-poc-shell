@@ -13,7 +13,11 @@ const quickLinksCategoriesFromApi: QuickLinksProps = {
     title: 'Quick Links',
     items: [
         {
-            link_text: 'Link 1',
+            link_text: 'Casual Men\'s Suits',
+            link: '/',
+        },
+        {
+            link_text: 'Men\'s Prom Suits',
             link: '/',
         },
     ]
@@ -37,21 +41,27 @@ const quickLinksCategoriesFromApi: QuickLinksProps = {
  * @returns {React.ReactElement} A quick links section with click functionality
  */
 const QuickLinks: React.FC<QuickLinksProps> = (props: QuickLinksProps): JSX.Element => {
-    const { items, title, id, $ , slug } = props
+    const { title, id, $ , slug } = props
     const slugParentCategory = props.slug?.[0]
     const slugSubCategory = props.slug?.[1]
-    const categoriesSourcefromCMS = props.items
     const { webConfig } = useWebConfigContext()
+    const quickLinksCategories = webConfig?.quick_links?.items
+    const categoriesSourcefromCMS = quickLinksCategories
+    const mergedCategories = [
+        ...(quickLinksCategoriesFromApi.items || []),
+        ...(categoriesSourcefromCMS || [])
+    ]
+    
     return (
         <div id={id} className="mx-[2.25rem] md:mx-[5.25rem] my-8">
             <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-stone">
                 {title ?? title}
             </h2>
 
-            {categoriesSourcefromCMS && (
+            {mergedCategories.length > 0 && (
                 <div className="space-y-4">
                     <div className="flex flex-wrap items-center gap-3">
-                        {categoriesSourcefromCMS.map(entry => {
+                        {mergedCategories.map(entry => {
                             return (
                                 <button
                                     key={entry.link_text}

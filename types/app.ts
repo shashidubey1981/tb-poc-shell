@@ -1,5 +1,6 @@
 import { Asset, ConsentFormProps, EmbedEntry, Entry, LivePreviewTypeMapper, localeItems, UserFormModal} from './common'
 import { ExternalLink, InternalLink } from './common'
+import { QuickLinks } from './components';
 
 // ######################### MAIN LAYOUT #########################
 export type MainLayout = {
@@ -11,6 +12,7 @@ export type MainLayout = {
 };
 
 export type WebConfig =  Entry & Header & {
+  quick_links?: QuickLinks;
   footer_navigation: Footer[]; 
   main_navigation: Navigation[];
   consent_modal?: ConsentFormProps;
