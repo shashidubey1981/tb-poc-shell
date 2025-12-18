@@ -1,7 +1,7 @@
 'use client'
-import React, {useState} from 'react'
+import React from 'react'
 import { QuickLinks as QuickLinksProps } from '@/types/components'
-import { App } from '@/types'
+import { useWebConfigContext } from '@/context'
 
 
 /**
@@ -41,7 +41,7 @@ const QuickLinks: React.FC<QuickLinksProps> = (props: QuickLinksProps): JSX.Elem
     const slugParentCategory = props.slug?.[0]
     const slugSubCategory = props.slug?.[1]
     const categoriesSourcefromCMS = props.items
-    const [webConfig, setWebConfig] = useState<App.WebConfig>()
+    const { webConfig } = useWebConfigContext()
     return (
         <div id={id} className="mx-[2.25rem] md:mx-[5.25rem] my-8">
             <h2 className="text-2xl md:text-3xl font-semibold mb-6 text-stone">

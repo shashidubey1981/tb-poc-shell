@@ -5,7 +5,7 @@ import { ConsentForm, Footer, Header, UserFormModal } from '@/components'
 import { App } from '@/types'
 
 import useRouterHook from '@/hooks/useRouterHook'
-import { LocaleContext, usePersonalization } from '@/context'
+import { LocaleContext, usePersonalization, WebConfigContext } from '@/context'
 import { footerJsonRtePathIncludes, footerReferenceIncludes, getEntries, navigationReferenceIncludes, userFormJsonRtePathIncludes, userFormReferenceIncludes } from '@/services'
 import { onEntryChange } from '@/config'
 
@@ -57,6 +57,11 @@ const MainLayout: React.FC<App.MainLayout> = (
                     currentLocale: locale
                 }}
             >
+            <WebConfigContext.Provider
+                value={{
+                    webConfig: webConfig
+                }}
+            >
                 {
                     webConfig?.main_navigation?.[0] && webConfig?.logo
                     && <Header
@@ -84,6 +89,7 @@ const MainLayout: React.FC<App.MainLayout> = (
                 />}
                 {/* user sign up from */}
                 {webConfig?.user_form?.[0] && <UserFormModal {...webConfig.user_form[0]} />}
+            </WebConfigContext.Provider>
             </LocaleContext.Provider>}
         </>
     )
