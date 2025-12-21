@@ -7,10 +7,10 @@ export default async function RootLayout ({
     children: React.ReactNode
 }>) {
     return (
-        <PersonalizationProvider>
+
             <MainLayout>
                 {children}
             </MainLayout>
-        </PersonalizationProvider>
+
     )
 }

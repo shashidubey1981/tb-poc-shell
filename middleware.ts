@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { defaultLocale, localeCookieName } from '@/config/localization'
 import { createManagmentHeaders } from '@/config/contentstack/managementSDK'
 import { isLocale } from '@/utils/localization'
-import { Locale } from './types/common' 
+import { Locale } from './types/common'
+import { initPersonalizeInMiddleware } from "@/services/personalize/personalize";
+import { getEntries } from '@/services'
+import { Common } from '@/types'
+import { getPersonalizeAttribute, removeSpecialChar } from '@/utils'
 
 const fetchLocales = async () => {
     const requestOptions = createManagmentHeaders('GET')
@@ -15,13 +19,12 @@ const fetchLocales = async () => {
         fallback_locale: locale.fallback_locale
     })) : []
 }
- 
+
 export async function middleware (request: NextRequest) {
     const pathname = request.nextUrl.pathname
     const languagesCookie = request.cookies.get(localeCookieName)
     
     const locales =  languagesCookie?.value ? JSON.parse(languagesCookie.value) : await fetchLocales()
-
     let currentLocale = defaultLocale
     const pathnameHasLocale = pathname.split('/')?.some((p) => {
         return isLocale(p)
@@ -32,19 +35,24 @@ export async function middleware (request: NextRequest) {
     if (pathSegments.length > 1 && isLocale(pathSegments[1])) {
         currentLocale = pathSegments[1]
     }
-
-
+        const { sdk, variantParam } = await initPersonalizeInMiddleware(request);
+        console.log('variantParam', sdk.getVariantAliases());
+        console.log('variants', JSON.stringify(variantParam));
+    
+    
     const requestHeaders = new Headers(request.headers)
     requestHeaders.set('x-request-locale', currentLocale)
-
+    request.nextUrl.searchParams.set(sdk.VARIANT_QUERY_PARAM, variantParam);
+    console.log('request.nextUrl.searchParams', request.nextUrl.searchParams);
     if (pathnameHasLocale) {
+        console.log('pathnameHasLocale', pathnameHasLocale);
         try {
-            const response = NextResponse.next({
+            const response = NextResponse.rewrite(request.nextUrl, {
                 request: {
                     headers: requestHeaders
                 }
             })
-
+            await sdk.addStateToResponse(response);
             if (!languagesCookie)  {
            
                 // set "languages" cookie in res.cookie - if cookie not exist 
@@ -57,7 +65,6 @@ export async function middleware (request: NextRequest) {
                 return response
 
             } // if request.cookie exist then return
-
             return response
         
         } catch(err) {
@@ -72,7 +79,7 @@ export async function middleware (request: NextRequest) {
 
     // Redirect to default locale if there is no locale in url
     request.nextUrl.pathname = `/${defaultLocale}${pathname}`
-    return NextResponse.redirect(request.nextUrl)
+    return NextResponse.rewrite(request.nextUrl)
 }
  
 export const config = {

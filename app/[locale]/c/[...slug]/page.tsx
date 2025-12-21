@@ -20,6 +20,7 @@ import {
 import { getEntryByUrl } from '@/services'
 import { usePersonalization } from '@/context'
 import { App } from '@/types'
+import { variantAliasesFromSearchParams } from "@/services/personalize/server";
 
 /**
  * @component Category Landing Page - Slug Based
@@ -29,7 +30,7 @@ import { App } from '@/types'
  * 
  * @returns {JSX.Element}
  */
-export default function LandingPage ({ params }: { params: Promise<any> }) {
+export default function LandingPage ({ params, searchParams }: { params: Promise<any>;searchParams: Record<string, string | string[] | undefined>; }) {
     
     const unwrappedParams = use(params)
     const pathInfoEntries = unwrappedParams;
@@ -41,20 +42,22 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
     const {path, locale} = useRouterHook()
     const [isABTestEnabled, setIsABTestEnabled] = useState<boolean>(false)
     const { personalizationSDK } = usePersonalization()
-
+    
     /**
      * useEffect to conditionally trigger and impression for a configured AB testing 
      * */ 
     useEffect(() => {
-        const variants = personalizationSDK?.getVariants() ?? {}
+        const variantAliases = variantAliasesFromSearchParams(searchParams["personalize_variants"])
+        const experienceId = process.env.CONTENTSTACK_AB_EXPERIENCE_ID ?? '1'
+        const activeVariant = personalizationSDK?.getActiveVariant(experienceId)
         if (path === process.env.CONTENTSTACK_AB_LANDING_PAGE_PATH 
             && Personalize.getInitializationStatus() 
             && Personalize.getInitializationStatus() === 'success'
-            && variants[process.env.CONTENTSTACK_AB_EXPERIENCE_ID??'1']) {
+            && activeVariant) {
             setIsABTestEnabled(true)
-            personalizationSDK?.triggerImpression(process.env.CONTENTSTACK_AB_EXPERIENCE_ID??'1' as string)
+            personalizationSDK?.triggerImpression(experienceId)
         }
-    }, [Personalize.getInitializationStatus()])
+    }, [Personalize.getInitializationStatus(), personalizationSDK, path])
 
     /**
      * useEffect that fetches data to be rendered on the page
