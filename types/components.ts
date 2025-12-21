@@ -66,6 +66,7 @@ export interface Teaser {
   cta?: CTA[];
   image?: Image[];
   video?: Video;
+  isABEnabled?: boolean;
   styles?: {
     text_align?: string;
   }

@@ -47,14 +47,17 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
      * */ 
     useEffect(() => {
         const variants = personalizationSDK?.getVariants() ?? {}
-        if (path === process.env.CONTENTSTACK_AB_LANDING_PAGE_PATH 
+        const categoryABTestPath = process.env.CONTENTSTACK_CATEGORY_AB_LANDING_PAGE_PATH
+        const experienceId = process.env.CONTENTSTACK_AB_EXPERIENCE_ID ?? '1'
+        
+        if (path === categoryABTestPath 
             && Personalize.getInitializationStatus() 
             && Personalize.getInitializationStatus() === 'success'
-            && variants[process.env.CONTENTSTACK_AB_EXPERIENCE_ID??'1']) {
+            && variants[experienceId]) {
             setIsABTestEnabled(true)
-            personalizationSDK?.triggerImpression(process.env.CONTENTSTACK_AB_EXPERIENCE_ID??'1' as string)
+            personalizationSDK?.triggerImpression(experienceId)
         }
-    }, [Personalize.getInitializationStatus()])
+    }, [Personalize.getInitializationStatus(), path, personalizationSDK])
 
     /**
      * useEffect that fetches data to be rendered on the page
@@ -75,6 +78,7 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
                 const contentType = 'category_landing_page'
                 const path = '/c'
                 const res = await getEntryByUrl<Page.LandingPage['entry']>(contentType,locale, path, refUids, jsonRtePaths, personalizationSDK) as Page.LandingPage['entry']
+                console.log('components', res?.components)
                 setData(res)
                 setDataForChromeExtension({ entryUid: res?.uid || '', contenttype: contentType, locale: locale })
                 if (!res && !isNull(res)) {

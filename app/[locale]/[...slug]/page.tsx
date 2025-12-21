@@ -35,7 +35,7 @@ export default function LandingPage () {
      * */ 
     useEffect(() => {
         const variants = personalizationSDK?.getVariants() ?? {}
-        if (path === process.env.CONTENTSTACK_AB_LANDING_PAGE_PATH 
+        if (path === process.env.CONTENTSTACK_CATEGORY_AB_LANDING_PAGE_PATH 
             && Personalize.getInitializationStatus() 
             && Personalize.getInitializationStatus() === 'success'
             && variants[process.env.CONTENTSTACK_AB_EXPERIENCE_ID??'1']) {

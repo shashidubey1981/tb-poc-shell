@@ -34,7 +34,7 @@ function Header (props: App.Header): JSX.Element {
 
     // Determine if the current page is the home page (or AB Test Landing Page) or not
     // Further used to set transparency of the header if the page is the home page or AB Test Landing Page or Article Page
-    const isHome: boolean = (path === '/' || path === process.env.CONTENTSTACK_AB_LANDING_PAGE_PATH || path.split('/')[1] === 'article' || path.split('/')[1] === 'contact-us') ? true : false
+    const isHome: boolean = (path === '/' || path.split('/')[1] === 'article' || path.split('/')[1] === 'contact-us') ? true : false
 
     const { personalizationSDK, personalizeConfig } = usePersonalization()
 

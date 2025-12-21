@@ -69,6 +69,7 @@ function RenderComponents({
 
                     <Teaser
                         id={`teaser-${key}`}
+                        isABEnabled={isABEnabled}
                         {...component.teaser}
                     />
 

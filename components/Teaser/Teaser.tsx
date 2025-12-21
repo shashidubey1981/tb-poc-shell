@@ -25,8 +25,8 @@ import { isDataInLiveEdit, resolveCta } from '@/utils'
  */
 
 const Teaser: React.FC<TeaserProps> = (props: TeaserProps) => {
-    const { $, heading, content, cta, image, video, styles, id } = props
-
+    const { $, heading, content, cta, image, video, styles, id, isABEnabled } = props
+    console.log('isABEnabled', isABEnabled)
     const ctaLink = resolveCta(cta)
     let position_css
 
@@ -69,6 +69,7 @@ const Teaser: React.FC<TeaserProps> = (props: TeaserProps) => {
                     </div>}
                     {cta?.[0]?.text && ctaLink && <div {...cta?.[0]?.$?.link}><Link
                         url={ctaLink}
+                        isABEnabled={isABEnabled}
                         className={`relative tracking-normal mt-8.9 max-w-full w-max btn-primary ${(position_css?.includes('justify-end') ? 'justify-self-end' : '')}`}
                     >
                         <span {...cta?.[0]?.$?.text}>{cta[0].text}</span>
