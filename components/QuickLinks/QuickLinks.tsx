@@ -48,8 +48,8 @@ const QuickLinks: React.FC<QuickLinksProps> = (props: QuickLinksProps): JSX.Elem
     const quickLinksCategories = webConfig?.quick_links?.items
     const categoriesSourcefromCMS = quickLinksCategories
     const mergedCategories = [
-        ...(quickLinksCategoriesFromApi.items || []),
-        ...(categoriesSourcefromCMS || [])
+        ...(categoriesSourcefromCMS || []),
+        ...(quickLinksCategoriesFromApi.items || [])
     ]
     const [isOpen, setIsOpen] = useState(false)
     

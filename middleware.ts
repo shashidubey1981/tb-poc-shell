@@ -3,6 +3,7 @@ import { defaultLocale, localeCookieName } from '@/config/localization'
 import { createManagmentHeaders } from '@/config/contentstack/managementSDK'
 import { isLocale } from '@/utils/localization'
 import { Locale } from './types/common' 
+import { initializePersonalizeSDK } from '@/config/personalization'
 
 const fetchLocales = async () => {
     const requestOptions = createManagmentHeaders('GET')
@@ -19,7 +20,18 @@ const fetchLocales = async () => {
 export async function middleware (request: NextRequest) {
     const pathname = request.nextUrl.pathname
     const languagesCookie = request.cookies.get(localeCookieName)
+    let sdk: any = null;
+    let variantParam: string | null = null;
     
+    try {
+        sdk = await initializePersonalizeSDK(request as any);
+        if (sdk) {
+            variantParam = sdk.getVariantParam();
+        }
+    } catch (error) {
+        console.error('Failed to initialize personalization SDK:', error);
+        // Continue without personalization if SDK initialization fails
+    }
     const locales =  languagesCookie?.value ? JSON.parse(languagesCookie.value) : await fetchLocales()
 
     let currentLocale = defaultLocale
@@ -72,7 +84,15 @@ export async function middleware (request: NextRequest) {
 
     // Redirect to default locale if there is no locale in url
     request.nextUrl.pathname = `/${defaultLocale}${pathname}`
-    return NextResponse.redirect(request.nextUrl)
+    if (variantParam) {
+        request.nextUrl.searchParams.set("personalize_variants", variantParam); // default param name used by SDK  [oai_citation:3‡Contentstack](https://www.contentstack.com/docs/developers/sdks/personalize-edge-sdk/javascript/reference)
+    }
+    const redirectResponse = NextResponse.redirect(request.nextUrl);
+    if (sdk) {
+        console.log('Adding personalization state to response');
+        await sdk.addStateToResponse(redirectResponse as any);
+    }
+    return redirectResponse
 }
  
 export const config = {
