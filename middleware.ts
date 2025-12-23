@@ -85,7 +85,7 @@ export async function middleware (request: NextRequest) {
     // Redirect to default locale if there is no locale in url
     request.nextUrl.pathname = `/${defaultLocale}${pathname}`
     if (variantParam) {
-        request.nextUrl.searchParams.set("personalize_variants", variantParam); // default param name used by SDK  [oai_citation:3‡Contentstack](https://www.contentstack.com/docs/developers/sdks/personalize-edge-sdk/javascript/reference)
+        // request.nextUrl.searchParams.set("personalize_variants", variantParam); // default param name used by SDK  [oai_citation:3‡Contentstack](https://www.contentstack.com/docs/developers/sdks/personalize-edge-sdk/javascript/reference)
     }
     const redirectResponse = NextResponse.redirect(request.nextUrl);
     if (sdk) {
