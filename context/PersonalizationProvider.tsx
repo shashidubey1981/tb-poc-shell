@@ -4,7 +4,6 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import Personalize from '@contentstack/personalize-edge-sdk'
 import { Sdk } from '@contentstack/personalize-edge-sdk/dist/sdk'
 import { Common } from '@/types'
-import { getEntries } from '@/services'
 
 const personalizeConfiguration: Common.PersonalizeConfig = {
     uid: '',
@@ -25,13 +24,20 @@ export const usePersonalization = () => {
 }
 
 // Create a provider component to wrap the application with the Personalization context
-export const PersonalizationProvider = ({ children }: { children: ReactNode }) => {
-
-    const [personalizeConfig, setPersonalizeConfig] = useState<Common.PersonalizeConfig | undefined>()
+export const PersonalizationProvider = ({ 
+    children, 
+    personalizeConfig: serverPersonalizeConfig 
+}: { 
+    children: ReactNode
+    personalizeConfig?: Common.PersonalizeConfig
+}) => {
 
     const [isInitialized, setIsInitialized] = useState<boolean>(false)
 
     const [personalizationSDK, setPersonalizationSDK] = useState<Sdk | undefined>()
+
+    // Use server-provided config if available, otherwise use default
+    const personalizeConfig = serverPersonalizeConfig || personalizeConfiguration
 
     const initializePersonalizationSDK = async () => {
         try {
@@ -64,32 +70,16 @@ export const PersonalizationProvider = ({ children }: { children: ReactNode }) =
 
     }
 
-    // Fetch the Personalize Config from the CMS and set it in the state
-    const getPersonalizationConfigFromCMS = async () => {
-        try{
-            const personalize_config = await getEntries('personalize_config', process.env.DEFAULT_LOCALE ?? 'en', [],[], {}, personalizationSDK) as Common.PersonalizeConfig[]
-            if (personalize_config && personalize_config?.length > 0) {
-                setPersonalizeConfig(personalize_config[0])
-            } else {
-                throw 'Unable to fetch Personalize Config | 404'
-            }
-        } catch(e){
-            console.error({fetchError: e})
-        }
-
-    }
-
     useEffect(() => {
         initializePersonalizationSDK().then(() => {
             setIsInitialized(true)
-            getPersonalizationConfigFromCMS()
         })
     }, [])
 
     return (
         // Provide the Personalization context with the initialization status, initalized personalization SDK instance, and personalizeConfig
         <PersonalizationContext.Provider
-            value={{ isInitialized, personalizationSDK: personalizationSDK, personalizeConfig: personalizeConfig! }}
+            value={{ isInitialized, personalizationSDK: personalizationSDK, personalizeConfig: personalizeConfig }}
         >
             {isInitialized && children}
         </PersonalizationContext.Provider>

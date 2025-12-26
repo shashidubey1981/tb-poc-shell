@@ -4,7 +4,7 @@ import {isNull}  from 'lodash'
 import Personalize from '@contentstack/personalize-edge-sdk'
 import { RenderComponents } from '@/components'
 import { Page } from '@/types'
-import { isDataInLiveEdit } from '@/utils'
+import { getPersonalizeAttribute, isDataInLiveEdit, removeSpecialChar } from '@/utils'
 import { NotFoundComponent, PageWrapper } from '@/components'
 import { onEntryChange } from '@/config'
 import useRouterHook from '@/hooks/useRouterHook'
@@ -40,8 +40,8 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
     const [loading, setLoading] = useState<boolean>(true)
     const {path, locale} = useRouterHook()
     const [isABTestEnabled, setIsABTestEnabled] = useState<boolean>(false)
-    const { personalizationSDK } = usePersonalization()
-
+    const { personalizationSDK, personalizeConfig } = usePersonalization()
+    
     /**
      * useEffect to conditionally trigger and impression for a configured AB testing 
      * */ 
@@ -59,12 +59,25 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
         }
     }, [Personalize.getInitializationStatus(), path, personalizationSDK])
 
+    const isPersonalizeNeeded = async () => {
+        const audiences = personalizeConfig?.audiences
+                const criteria = path.split('/').pop()?.toLowerCase()
+                const attributes = getPersonalizeAttribute(audiences, removeSpecialChar(String(criteria)))
+                // Check if attributes is empty or has values
+                const hasAttributes = attributes && typeof attributes === 'object' && Object.keys(attributes).length > 0
+                if (hasAttributes) {
+                    return true
+                } else {
+                    return false
+                }
+    }
     /**
      * useEffect that fetches data to be rendered on the page
      * */ 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const sendPersonalizeNeeded = await isPersonalizeNeeded()
                 const refUids = [
                     ...dynamicComponentReferenceIncludes,
                     ...heroReferenceIncludes,
@@ -77,7 +90,7 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
                 ]
                 const contentType = 'category_landing_page'
                 const path = '/c'
-                const res = await getEntryByUrl<Page.LandingPage['entry']>(contentType,locale, path, refUids, jsonRtePaths, personalizationSDK) as Page.LandingPage['entry']
+                const res = await getEntryByUrl<Page.LandingPage['entry']>(contentType,locale, path, refUids, jsonRtePaths, personalizationSDK, sendPersonalizeNeeded) as Page.LandingPage['entry']
                 console.log('components', res?.components)
                 setData(res)
                 setDataForChromeExtension({ entryUid: res?.uid || '', contenttype: contentType, locale: locale })

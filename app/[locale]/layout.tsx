@@ -1,13 +1,20 @@
 import { MainLayout } from '@/MainLayout'
 import { PersonalizationProvider } from '@/context'
+import { getPersonalizationConfigFromCMS} from '@/services'
 
 export default async function RootLayout ({
-    children
+    children,
+    params
 }: Readonly<{
     children: React.ReactNode
+    params: Promise<{ locale: string }>
 }>) {
+    
+    // Fetch personalization config on the server
+    const personalizeConfig = await getPersonalizationConfigFromCMS()
+
     return (
-        <PersonalizationProvider>
+        <PersonalizationProvider personalizeConfig={personalizeConfig || undefined}>
             <MainLayout>
                 {children}
             </MainLayout>

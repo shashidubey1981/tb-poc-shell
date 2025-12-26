@@ -6,6 +6,8 @@ import { Sdk } from '@contentstack/personalize-edge-sdk/dist/sdk'
 import { Stack } from '@/config'
 import { deserializeVariantIds } from '@/utils'
 import { isEditButtonsEnabled } from '@/config'
+import { defaultLocale } from '@/config/localization'
+import { Common } from '@/types'
 
 /**
   *
@@ -96,7 +98,7 @@ export const getEntries = async <T>(contentTypeUid: string, locale: string , ref
  * @param {* Json RTE path} jsonRtePath
  *
  */
-export const getEntryByUrl = async <T> (contentTypeUid: string, locale: string, entryUrl: string, referenceFieldPath: string[], jsonRtePath: string[], personalizationSDK?: Sdk | undefined) => {
+export const getEntryByUrl = async <T> (contentTypeUid: string, locale: string, entryUrl: string, referenceFieldPath: string[], jsonRtePath: string[], personalizationSDK?: Sdk | undefined, isPersonalizeNeeded?: boolean) => {
     try {
         let result: { entries: T[] } | null = null
         if (!Stack) {
@@ -110,8 +112,11 @@ export const getEntryByUrl = async <T> (contentTypeUid: string, locale: string, 
             .includeFallback()
             .includeEmbeddedItems()
             .includeReference(referenceFieldPath ?? [])
-            .variants(deserializeVariantIds(personalizationSDK))
             
+        if (isPersonalizeNeeded) {
+            entryQuery.variants(deserializeVariantIds(personalizationSDK))
+        }
+
         if (referenceFieldPath){
             for (const path of referenceFieldPath) {
                 entryQuery.includeReference(path)
@@ -147,4 +152,28 @@ export const getEntryByUrl = async <T> (contentTypeUid: string, locale: string, 
         console.error('🚀 ~ getEntryByUrl ~ error:', error)
         throw error
     }
+}
+
+/**
+ * Fetches the personalization config from CMS
+ * This is a server-side function that should be called in Server Components
+ * @param {* locale} locale - Optional locale, defaults to defaultLocale
+ * @param {* personalizationSDK} personalizationSDK - Optional personalization SDK instance
+ * @returns {Promise<Common.PersonalizeConfig | null>} The personalization config or null if not found
+ */
+
+export const getPersonalizationConfigFromCMS = async () => {
+    try{
+        const personalize_config = await getEntries('personalize_config', process.env.DEFAULT_LOCALE ?? 'en', [],[], {}) as Common.PersonalizeConfig[]
+        if (personalize_config && personalize_config?.length > 0) {
+            return personalize_config[0]
+        } else {
+            throw 'Unable to fetch Personalize Config | 404'
+        }
+    } catch(e){
+        console.error('🚀 ~ getPersonalizationConfig ~ error:', e)
+        return null
+        
+    }
+
 }
