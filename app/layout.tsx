@@ -19,8 +19,8 @@ const robotoCondensed = Roboto_Condensed({
 })
 
 export const metadata: Metadata = {
-    title: 'Compass starter',
-    description: 'Provided by Contentstack'
+    title: 'Mens Wearhouse: Shop Mens Clothing, Suits & Tux Rentals',
+    description: 'Provided by Mens Wearhouse'
 }
 
 export default async function RootLayout ({
@@ -35,13 +35,6 @@ export default async function RootLayout ({
     return (
         <html lang={defaultLocale}>
             <head>
-                <link rel='preconnect' href={process.env.CONTENTSTACK_HOST} />
-                <link rel='preconnect' href={process.env.CONTENTSTACK_PERSONALIZE_EDGE_API_URL} />
-                <link rel='preconnect' href={process.env.CONTENTSTACK_HOST?.replace(/cdn\./, 'images.')} />
-                <link rel='dns-fetch' href={process.env.CONTENTSTACK_API_HOST} />
-                <link rel='dns-fetch' href='https://contentstack.com' />
-                <link rel='dns-fetch' href='https://contentstack.io' />
-
                 {/* eslint-disable @next/next/google-font-preconnect */}
                 <link
                     rel='preload'
