@@ -5,8 +5,10 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import './globals.css'
 import '/node_modules/flag-icons/css/flag-icons.min.css'
-import { headers } from 'next/headers'
 import { defaultLocale } from '@/config'
+import { MainLayout } from '@/MainLayout'
+import { PersonalizationProvider } from '@/context'
+import { getPersonalizationConfigFromCMS} from '@/services'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,12 +28,12 @@ export default async function RootLayout ({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-
-    const headerList = await headers()
-    const locale = headerList.get('x-request-locale')
+    
+    // Fetch personalization config on the server
+    const personalizeConfig = await getPersonalizationConfigFromCMS()
 
     return (
-        <html lang={locale || defaultLocale}>
+        <html lang={defaultLocale}>
             <head>
                 <link rel='preconnect' href={process.env.CONTENTSTACK_HOST} />
                 <link rel='preconnect' href={process.env.CONTENTSTACK_PERSONALIZE_EDGE_API_URL} />
@@ -52,7 +54,11 @@ export default async function RootLayout ({
             <body
                 className={`${robotoCondensed.className} ${inter.className}`}
             >
-                {children}
+                <PersonalizationProvider personalizeConfig={personalizeConfig || undefined}>
+                    <MainLayout>
+                        {children}
+                    </MainLayout>
+                </PersonalizationProvider>
             </body>
         </html>
     )

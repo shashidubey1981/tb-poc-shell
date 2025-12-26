@@ -162,6 +162,7 @@ export type PGPCTA = {
   $?: LivePreviewTypeMapper<PGPCTA>;
   text?: string;
   url?: string;
+  link?: InternalLink[];
 };
 
 export type UserFormModal = {

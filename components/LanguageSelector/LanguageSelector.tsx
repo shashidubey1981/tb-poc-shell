@@ -20,17 +20,10 @@ const LanguageSelector: FunctionComponent<App.LangaugeSelector> = (props: App.La
     const { locales, Opac } = props
 
     // ? Method to handle the switching of Language
-    // * 1. URL routing -> Page will refresh
-    // * 2. Context API -> Page won't refresh
+    // * Note: Locale switching is disabled as locale is now read from process.env.DEFAULT_LOCALE
     const handleLanguageSwitch = (locale: Locale) => {
-
-        setCurrentLocale(getFlagCode(locale?.code))
-
-        const updatedRoute = `/${locale?.code}${router.path}`
-
-        // router.replace(updatedRoute) -- The edit button is not working when page is loaded using useRouterHook. The page need full refresh to enable the Edit button.
-        window.location.href = updatedRoute
-
+        // Locale switching is not supported when using process.env.DEFAULT_LOCALE
+        console.warn('Locale switching is not supported. Locale is set via process.env.DEFAULT_LOCALE')
     }
 
     // ? Method to render the language dropdown options

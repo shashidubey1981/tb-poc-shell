@@ -16,7 +16,7 @@ import { getEntries, getEntryByUrl } from '@/services'
 /**
  * @component Article - ArticleListing Component (Slug Based)
  * 
- * @route '/{locale}/articles/{slug}'
+ * @route '/articles/{slug}'
  * @description Component that renders the all articles page based on the slug (region/topic)
  * 
  * @returns {JSX.Element}

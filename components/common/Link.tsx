@@ -42,7 +42,7 @@ const LinkComponent: React.FC<LinkComponentType> = (props: LinkComponentType) =>
      * Builds the final href URL by combining internal/external link with locale
      * @type {string}
      */
-    const href: string = buildLinkUrl(internal_link, external_link, currentLocale)
+    const href: string = buildLinkUrl(internal_link, external_link)
 
     /**
      * Handles click events on the link.

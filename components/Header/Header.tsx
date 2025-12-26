@@ -7,8 +7,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid'
 import { CTAGroup, Image, Link } from '@/components'
 import { App } from '@/types'
 import useRouterHook from '@/hooks/useRouterHook'
-import { getJsonCookie, getPersonalizeAttribute, isCookieExist, removeSpecialChar } from '@/utils'
-import { localeCookieName } from '@/config'
+import { getPersonalizeAttribute, removeSpecialChar } from '@/utils'
 import { LivePreviewTypeMapper, Locale  } from '@/types/common'
 import { usePersonalization } from '@/context'
 import { Header as HeaderType, MegaMenuSection } from '@/types/app'
@@ -29,7 +28,7 @@ function Header (props: App.Header): JSX.Element {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [currPanel, setCurrPanel] = useState('')
     const [, setOpen] = useState(false)
-    const [locales, setLocales] = useState<Locale[] | []>([])
+    const [locales] = useState<Locale[] | []>([])
     const { path } = useRouterHook()
 
     // Determine if the current page is the home page (or AB Test Landing Page) or not
@@ -41,10 +40,6 @@ function Header (props: App.Header): JSX.Element {
     const audiences = personalizeConfig?.audiences
 
     const router = useRouterHook()
-
-    useEffect(() => {
-        if (isCookieExist(localeCookieName)) setLocales(getJsonCookie(localeCookieName))
-    }, [props])
 
     // Function for opening the item menu in mobile side bar
     const handleMouseOver = (e: React.MouseEvent) => {
@@ -85,7 +80,7 @@ function Header (props: App.Header): JSX.Element {
             <nav className={`px-[2.25rem] md:px-21 h-[6.25rem] flex items-center justify-between border-b border-stone ${mobileMenuOpen ? 'hidden sm:flex' : ''}`} aria-label='Global'>
                 <div className='flex lg:flex-1`'>
                     {logo?.url && <Link url='/'>
-                        <h1 className='sr-only' aria-hidden='true'>Compass Starter</h1>
+                        <h1 className='sr-only' aria-hidden='true'>Menswear House</h1>
                         <img
                             className='h-[3.3825rem] w-[10rem] xs:w-[11.75rem]'
                             src={logo?.url}
@@ -144,7 +139,7 @@ function Header (props: App.Header): JSX.Element {
                                                         {...item?.mega_menu?.[0]?.sections?.[0].$?.[`links__${ind}` as keyof LivePreviewTypeMapper<MegaMenuSection>]}
                                                     >       
                                                         <a
-                                                            href={linkData?.link?.[0]?.url ? '/' + router.locale + linkData?.link?.[0]?.url : '/' + router.locale + linkData.url}
+                                                            href={linkData?.link?.[0]?.url ? linkData?.link?.[0]?.url : linkData.url}
                                                             className='relative flex flex-col outline-none size-[12rem] xl:size-[225.43px] border-transparent
                                                             shadow-[0.69813rem_0.69813rem_1.57125rem_0.17444rem_rgba(0,0,0,0.5)] bg-stone shadow-stone/50 overflow-hidden group'
                                                             onClick={() => setAttribute(String(linkData?.link?.[0]?.url ? linkData?.link?.[0]?.url : linkData.url))}

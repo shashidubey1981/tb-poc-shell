@@ -13,7 +13,7 @@ import { usePersonalization } from '@/context'
 /**
  * @component Home 
  * 
- * @route '/{locale}/'
+ * @route '/'
  * @description component that renders the home page of the app
  *  
  * @returns {JSX.Element} The rendered homepage content

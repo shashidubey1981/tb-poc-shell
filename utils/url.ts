@@ -43,7 +43,7 @@ export const resolveCta = (cta?: CTA[]) => {
  * - For relative URLs: Prepends locale if provided
  * - Returns empty string if no valid URL can be constructed
  */
-export const buildLinkUrl = (internalLink?: InternalLink[], url?: string, locale?: string) => {
+export const buildLinkUrl = (internalLink?: InternalLink[], url?: string) => {
     let result = ''
 
     if (internalLink && internalLink.length) {
@@ -61,9 +61,7 @@ export const buildLinkUrl = (internalLink?: InternalLink[], url?: string, locale
         } else {
             console.warn('Internal link not resolved', internalLink)
         }
-        if (locale) {
-            result = `/${locale}${result}`
-        }
+        
     } else if (url && (url.startsWith('https://') || url.startsWith('http://') || url.startsWith('/'))) {
         result = url
     } else if (url && url.startsWith('www.')) {
@@ -75,9 +73,7 @@ export const buildLinkUrl = (internalLink?: InternalLink[], url?: string, locale
     }
 
     if(url && !(url.startsWith('https://') || url.startsWith('http://')) && !url.startsWith('www.')) {
-        if (locale) {
-            result = `/${locale}${result}`
-        }
+        
     } 
     return result
 

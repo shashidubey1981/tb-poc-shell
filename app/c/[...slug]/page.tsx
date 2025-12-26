@@ -24,7 +24,7 @@ import { App } from '@/types'
 /**
  * @component Category Landing Page - Slug Based
  * 
- * @route '/{locale}/c/{slug}'
+ * @route '/c/{slug}'
  * @description Component that renders the category landing page based on the slug
  * 
  * @returns {JSX.Element}

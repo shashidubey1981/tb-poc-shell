@@ -15,7 +15,7 @@ import { usePersonalization } from '@/context'
 /**
  * @component ArticleListing - ArticleListing Component
  * 
- * @route '/{locale}/articles'
+ * @route '/articles'
  * @description Component that renders the all articles page
  * 
  * @returns {JSX.Element}

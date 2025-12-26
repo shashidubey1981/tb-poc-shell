@@ -17,7 +17,7 @@ import { usePersonalization } from '@/context'
 /**
  * @component LandingPage - Slug Based
  * 
- * @route '/{locale}/{slug}'
+ * @route '/{slug}'
  * @description Component that renders the landing page based on the slug
  * 
  * @returns {JSX.Element}
@@ -91,3 +91,4 @@ export default function LandingPage () {
     </>
     )
 }
+
