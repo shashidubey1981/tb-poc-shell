@@ -48,8 +48,12 @@ export default function LandingPage ({ params }: { params: Promise<any> }) {
     useEffect(() => {
         const variants = personalizationSDK?.getVariants() ?? {}
         const categoryABTestPath = process.env.CONTENTSTACK_CATEGORY_AB_LANDING_PAGE_PATH
-        const experienceId = process.env.CONTENTSTACK_AB_EXPERIENCE_ID ?? '1'
-        
+        const experienceId = process.env.CONTENTSTACK_AB_EXPERIENCE_MENS_SUITS_ID ?? '1'
+        console.log('categoryABTestPath', categoryABTestPath)
+        console.log('experienceId', experienceId)
+        console.log('variants', variants)
+        console.log('Personalize.getInitializationStatus()', Personalize.getInitializationStatus())
+        console.log('path', path)
         if (path === categoryABTestPath 
             && Personalize.getInitializationStatus() 
             && Personalize.getInitializationStatus() === 'success'
