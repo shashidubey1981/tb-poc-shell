@@ -6,7 +6,7 @@ import { App } from '@/types'
 
 import useRouterHook from '@/hooks/useRouterHook'
 import { LocaleContext, usePersonalization, WebConfigContext } from '@/context'
-import { footerJsonRtePathIncludes, footerReferenceIncludes, getEntries, navigationReferenceIncludes, userFormJsonRtePathIncludes, userFormReferenceIncludes } from '@/services'
+import { footerJsonRtePathIncludes, footerReferenceIncludes, getEntries, getWebConfigEntries, navigationReferenceIncludes, userFormJsonRtePathIncludes, userFormReferenceIncludes } from '@/services'
 import { onEntryChange } from '@/config'
 
 const MainLayout: React.FC<App.MainLayout> = (
@@ -19,21 +19,12 @@ const MainLayout: React.FC<App.MainLayout> = (
 
     const fetchAppConfig = async () => {
         try {
-            const refUids = [
-                ...navigationReferenceIncludes,
-                ...footerReferenceIncludes,
-                ...userFormReferenceIncludes
-            ]
-            const jsonRtePaths = [
-                ...userFormJsonRtePathIncludes,
-                ...footerJsonRtePathIncludes
-            ]
-        
-            const webConfigRes = await getEntries('web_configuration', locale, refUids, jsonRtePaths, {}, personalizationSDK) as App.WebConfig[]
+            
+            const webConfigRes = await getWebConfigEntries('web_configuration', locale) as App.WebConfig
 
-            if (webConfigRes && webConfigRes?.length > 0) {
+            if (webConfigRes) {
 
-                setWebConfig(webConfigRes[0])
+                setWebConfig(webConfigRes)
 
             } else {
 
@@ -72,23 +63,6 @@ const MainLayout: React.FC<App.MainLayout> = (
                 <div className='main-layout mx-auto h-screen min-h-screen justify-center relative'>
                     {props.children}
                 </div>
-                {
-                    webConfig?.footer_navigation?.[0] && webConfig?.logo
-                    && <Footer
-                        {...webConfig.footer_navigation[0]}
-                        logo={webConfig.logo}
-                    />
-                }
-                {/* sticky cookie consent from */}
-                {webConfig?.consent_modal && <ConsentForm
-                    {...webConfig.consent_modal}
-                    $={{
-                        consent_modal: webConfig?.$?.consent_modal ,
-                        ...webConfig?.consent_modal?.$
-                    }}
-                />}
-                {/* user sign up from */}
-                {webConfig?.user_form?.[0] && <UserFormModal {...webConfig.user_form[0]} />}
             </WebConfigContext.Provider>
             </LocaleContext.Provider>}
         </>

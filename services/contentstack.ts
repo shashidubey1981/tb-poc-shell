@@ -9,6 +9,31 @@ import { isEditButtonsEnabled } from '@/config'
 import { defaultLocale } from '@/config/localization'
 import { Common } from '@/types'
 
+// Get API base URL from environment variable or default to localhost:3001
+const getApiBaseUrl = () => {
+    return process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL || 'http://localhost:8080';
+}
+
+export const getWebConfigEntries = async (contentTypeUid: string, locale: string) => {
+    try {
+        const queryParams = `locale=${locale}&contentTypeUid=${contentTypeUid}`
+        const apiBaseUrl = getApiBaseUrl();
+        const response = await fetch(`${apiBaseUrl}/api/contentstack/web-config?${queryParams.toString()}`);
+        const data = await response.json();
+        console.log('data', data);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${data.message}`)
+        }
+        const entriesData = data;
+        return entriesData;
+    } catch (error) {
+        const apiBaseUrl = getApiBaseUrl();
+        if (error instanceof TypeError && error.message.includes('fetch failed')) {
+            throw new Error(`Failed to connect to API server at ${apiBaseUrl}. Please ensure the API server is running. Original error: ${error.message}`);
+        }
+        throw error;
+    }
+}
 /**
   *
   * fetches all the entries from specific content-type

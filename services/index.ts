@@ -1,2 +1,2 @@
-export {getEntries, getEntryByUrl, getPersonalizationConfigFromCMS} from './contentstack'
+export {getEntries, getEntryByUrl, getPersonalizationConfigFromCMS, getWebConfigEntries} from './contentstack'
 export * from './helper'
